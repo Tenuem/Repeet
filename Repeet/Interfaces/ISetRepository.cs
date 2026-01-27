@@ -5,7 +5,7 @@ namespace Repeet.Interfaces
 {
     public interface ISetRepository
     {
-        Task<List<Set>> GetAllSetsAsync();
+        Task<IEnumerable<Set>> GetAllSetsAsync();
         Task<Set?> GetSetByIdAsync(Guid id);
         Task<Set> CreateSetAsync(Set setModel);
         Task<Set?> UpdateSetAsync(Guid id, UpdateSetDto setDto);

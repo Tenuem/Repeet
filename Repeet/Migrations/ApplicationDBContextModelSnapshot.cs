@@ -36,8 +36,8 @@ namespace Repeet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SetId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

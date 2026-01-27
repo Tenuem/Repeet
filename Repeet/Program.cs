@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Repeet.Data;
 using Repeet.Interfaces;
 using Repeet.Repositories;
+using Repeet.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 builder.Services.AddScoped<ISetRepository, SetRepository>();
+builder.Services.AddScoped<IFlashcardRepository, FlashcardRepository>();
+
+builder.Services.AddScoped<IFlashcardService, FlashcardService>();
 
 var app = builder.Build();
 

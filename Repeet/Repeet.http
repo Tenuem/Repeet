@@ -12,7 +12,7 @@ POST {{HostAddress}}/sets
 Content-Type: application/json
 
 {
-    "name": "Furniture" 
+    "name": "Motos" 
 }
 
 ### Update previously added set
@@ -23,5 +23,32 @@ Content-Type: application/json
     "name": "Body shots" 
 }
 
-### Delete it
+### Delete the record with a given ID
 DELETE {{HostAddress}}/sets/1a278731-40ee-48bf-8260-f75f04ebfb36
+
+### Get all flashcards
+GET {{HostAddress}}/flashcards/
+
+### Get a new flashcard from the set
+GET {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7/flashcards/
+
+### Create a new flashcard
+POST {{HostAddress}}/flashcards/
+Content-Type: application/json
+
+{
+    "keyword": "huevo",
+    "definition": "jajo" 
+}
+
+### Update one record
+PUT {{HostAddress}}/flashcards/cba6ee84-f5ef-4174-9302-cfead34d4aa4
+Content-Type: application/json
+
+{
+    "keyword": "gallina",
+    "definition": "chicken"
+}
+
+### Delete the record with a given ID
+DELETE {{HostAddress}}/flashcards/fa3f3fb8-4b75-4829-a018-b5a78e14d6c9

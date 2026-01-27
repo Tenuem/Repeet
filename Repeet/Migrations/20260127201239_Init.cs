@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repeet.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace Repeet.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Keyword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Definition = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SetId = table.Column<int>(type: "int", nullable: true)
+                    SetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

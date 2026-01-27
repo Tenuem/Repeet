@@ -11,7 +11,7 @@ namespace Repeet.Repositories
     {
         private readonly ApplicationDBContext _db = db;
 
-        public async Task<List<Set>> GetAllSetsAsync() => await _db.Sets.ToListAsync();
+        public async Task<IEnumerable<Set>> GetAllSetsAsync() => await _db.Sets.ToListAsync();
         public async Task<Set?> GetSetByIdAsync(Guid id) => await _db.Sets.FindAsync(id);        
         public async Task<Set> CreateSetAsync(Set setModel)
         {

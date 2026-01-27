@@ -12,8 +12,8 @@ using Repeet.Data;
 namespace Repeet.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260127132331_init")]
-    partial class init
+    [Migration("20260127201239_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,8 +39,8 @@ namespace Repeet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SetId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

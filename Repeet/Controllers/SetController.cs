@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Repeet.Data;
 using Repeet.Dto;
 using Repeet.Models;
 using Repeet.Interfaces;
