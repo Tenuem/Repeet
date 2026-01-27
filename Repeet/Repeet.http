@@ -3,12 +3,16 @@
 GET {{HostAddress}}/sets/
 Accept: application/json
 
+### Read a specific one
+GET {{HostAddress}}/sets/6e215ad7-6987-4382-83c2-3327f1e35867
+Accept: application/json
+
 ### Create a new set
 POST {{HostAddress}}/sets
 Content-Type: application/json
 
 {
-    "name": "Body" 
+    "name": "Furniture" 
 }
 
 ### Update previously added set
@@ -16,8 +20,8 @@ PUT {{HostAddress}}/sets/569f6667-3ca4-4ac3-a405-7e8ab80c4c98
 Content-Type: application/json
 
 {
-    "name": "Body parts" 
+    "name": "Body shots" 
 }
 
 ### Delete it
-DELETE {{HostAddress}}/sets/93588c09-473a-4b99-9cca-d7e503eac84e
+DELETE {{HostAddress}}/sets/1a278731-40ee-48bf-8260-f75f04ebfb36

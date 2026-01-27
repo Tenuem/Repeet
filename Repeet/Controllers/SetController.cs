@@ -1,73 +1,65 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Repeet.Data;
 using Repeet.Dto;
 using Repeet.Models;
+using Repeet.Interfaces;
 
 namespace Repeet.Controllers
 {
     [Route("sets/")]
     [ApiController]
-    public class SetController(ApplicationDBContext db) : ControllerBase
+    public class SetController(ISetRepository repository) : ControllerBase
     {
-        private readonly ApplicationDBContext _db = db;
+        private readonly ISetRepository _repository = repository;
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<ActionResult<IEnumerable<SetDto>>> GetAll()
         {
-            var sets = _db.Sets.ToList()
-                .Select(s => new SetDto(s.Id, s.Name));
+            var sets = await _repository.GetAllSetsAsync();
+            var setDtos = sets.Select(s => new SetDto(s.Id, s.Name));
 
-            return Ok(sets);
+            return Ok(setDtos);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(Guid id)
+        public async Task<ActionResult<SetDto>> Get(Guid id)
         {
-            var set = _db.Sets.Find(id);
-            return set is null ?
+            var set = await _repository.GetSetByIdAsync(id);
+
+            return (set is null) ?
                     NotFound() : Ok(new SetDto(set.Id, set.Name));
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateSetDto dto)
+        public async Task<ActionResult<SetDto>> Create([FromBody] CreateSetDto dto)
         {
             // Create a new model from DTO
-            var setModel = new Set {
+            var setModel = await _repository.CreateSetAsync(new Set {
                 Id = Guid.NewGuid(),
                 Name = dto.Name
-            };
-
-            _db.Sets.Add(setModel);
-            _db.SaveChanges();
+            });
 
             // 201 response code
-            return CreatedAtAction(nameof(GetById), new {id = setModel.Id}, new SetDto(setModel.Id, setModel.Name));
+            return CreatedAtAction(nameof(Get), new {id = setModel.Id}, new SetDto(setModel.Id, setModel.Name));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateSetDto dto)
+        public async Task<ActionResult<SetDto>> Update([FromRoute] Guid id, [FromBody] UpdateSetDto dto)
         {
-            var setModel = _db.Sets.FirstOrDefault(s => s.Id == id);
-            if (setModel is null)
-                return NotFound();
+            var setModel = await _repository.UpdateSetAsync(id, dto);
 
-            setModel.Name = dto.Name;
-            _db.SaveChanges();
-
-            return Ok(new SetDto(setModel.Id, setModel.Name));
+            return (setModel is null) ?
+                NotFound() : Ok(new SetDto(setModel.Id, setModel.Name));
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete (Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var setModel = _db.Sets.FirstOrDefault(s => s.Id == id);
-            if (setModel is null)
-                return NotFound();
+            var setModel = await _repository.DeleteSetByIdAsync(id);
 
-            _db.Sets.Remove(setModel);
-            _db.SaveChanges();
-
-            return NoContent();
+            return (setModel is null) ?
+                NotFound() : NoContent();
         }
     }
 }
