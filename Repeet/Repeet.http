@@ -1,6 +1,23 @@
 @HostAddress = http://localhost:5136
 
-GET {{HostAddress}}/weatherforecast/
+GET {{HostAddress}}/sets/
 Accept: application/json
 
-###
+### Create a new set
+POST {{HostAddress}}/sets
+Content-Type: application/json
+
+{
+    "name": "Body" 
+}
+
+### Update previously added set
+PUT {{HostAddress}}/sets/569f6667-3ca4-4ac3-a405-7e8ab80c4c98
+Content-Type: application/json
+
+{
+    "name": "Body parts" 
+}
+
+### Delete it
+DELETE {{HostAddress}}/sets/93588c09-473a-4b99-9cca-d7e503eac84e

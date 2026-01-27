@@ -8,7 +8,7 @@ namespace Repeet.Data
         public ApplicationDBContext(DbContextOptions dbContextOptions)
         : base(dbContextOptions){}
 
-        public DbSet<Flashcard> Flashcard { get; set; }
-        public DbSet<Set> Set { get; set; }
+        public DbSet<Flashcard> Flashcards { get; set; }
+        public DbSet<Set> Sets { get; set; }
     }
 }
