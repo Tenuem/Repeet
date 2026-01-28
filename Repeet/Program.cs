@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Repeet.Data;
 using Repeet.Interfaces;
+using Repeet.Models;
 using Repeet.Repositories;
 using Repeet.Services;
 
@@ -14,10 +18,21 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
 });
 
+builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+})
+.AddEntityFrameworkStores<ApplicationDBContext>();
+
 builder.Services.AddScoped<ISetRepository, SetRepository>();
 builder.Services.AddScoped<IFlashcardRepository, FlashcardRepository>();
 
 builder.Services.AddScoped<IFlashcardService, FlashcardService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -25,11 +40,37 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     });
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = 
+    options.DefaultChallengeScheme = 
+    options.DefaultForbidScheme =
+    options.DefaultScheme = 
+    options.DefaultSignInScheme = 
+    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issurer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+        )
+    };
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

@@ -67,3 +67,22 @@ DELETE {{HostAddress}}/flashcards/2b7d54d8-abe2-41dd-9a52-b638902768b5
 
 ### Get set with a name that contains 'Cars'
 GET {{HostAddress}}/sets?setName=Cars
+
+### Create a user account
+POST {{HostAddress}}/account/register
+Content-Type: application/json
+
+{
+    "username": "Komodus",
+    "email": "komodinho@roma.it",
+    "password": "komodoro123$K"
+}
+
+### Login
+POST {{HostAddress}}/account/login
+Content-Type: application/json
+
+{
+    "username": "Komodus",
+    "password": "komodoro123$K"
+}

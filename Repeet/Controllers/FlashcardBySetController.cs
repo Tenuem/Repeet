@@ -44,6 +44,7 @@ namespace Repeet.Controllers
 
             // Create a new model from DTO assigned to the set
             var fscModel = await _service.CreateAsync(new Flashcard {
+                Id = Guid.NewGuid(),
                 Keyword = dto.Keyword,
                 Definition = dto.Definition,
                 SetId = setId
