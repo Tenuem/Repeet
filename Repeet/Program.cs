@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Repeet.Data;
 using Repeet.Interfaces;
 using Repeet.Repositories;
@@ -17,6 +18,12 @@ builder.Services.AddScoped<ISetRepository, SetRepository>();
 builder.Services.AddScoped<IFlashcardRepository, FlashcardRepository>();
 
 builder.Services.AddScoped<IFlashcardService, FlashcardService>();
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
 
 var app = builder.Build();
 

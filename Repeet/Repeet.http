@@ -4,7 +4,7 @@ GET {{HostAddress}}/sets/
 Accept: application/json
 
 ### Read a specific one
-GET {{HostAddress}}/sets/6e215ad7-6987-4382-83c2-3327f1e35867
+GET {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7
 Accept: application/json
 
 ### Create a new set
@@ -32,7 +32,7 @@ GET {{HostAddress}}/flashcards/
 ### Get a new flashcard from the set
 GET {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7/flashcards/
 
-### Create a new flashcard
+### Create a new flashcard without a set
 POST {{HostAddress}}/flashcards/
 Content-Type: application/json
 
@@ -41,14 +41,23 @@ Content-Type: application/json
     "definition": "jajo" 
 }
 
-### Update one record
-PUT {{HostAddress}}/flashcards/cba6ee84-f5ef-4174-9302-cfead34d4aa4
+### Create a new flashcard to the set
+POST {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7/flashcards/
 Content-Type: application/json
 
 {
-    "keyword": "gallina",
-    "definition": "chicken"
+    "keyword": "zapatos",
+    "definition": "buciory"
+}
+
+### Update one record
+PUT {{HostAddress}}/flashcards/2b7d54d8-abe2-41dd-9a52-b638902768b5
+Content-Type: application/json
+
+{
+    "keyword": "zapatitoos",
+    "definition": "buciki"
 }
 
 ### Delete the record with a given ID
-DELETE {{HostAddress}}/flashcards/fa3f3fb8-4b75-4829-a018-b5a78e14d6c9
+DELETE {{HostAddress}}/flashcards/2b7d54d8-abe2-41dd-9a52-b638902768b5

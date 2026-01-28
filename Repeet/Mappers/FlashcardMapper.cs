@@ -5,6 +5,6 @@ namespace Repeet.Mappers
 {
     public static class FlashcardMapper
     {
-        public static FlashcardDto toDto(this Flashcard fscModel) => new FlashcardDto(fscModel.Id, fscModel.Keyword, fscModel.Definition);
+        public static FlashcardDto ToDto(this Flashcard fscModel) => new FlashcardDto(fscModel.Id, fscModel.Keyword, fscModel.Definition, fscModel.SetId);
     }
 }

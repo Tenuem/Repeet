@@ -12,7 +12,7 @@ namespace Repeet.Repositories
         private readonly ApplicationDBContext _db = db;
 
         public async Task<IEnumerable<Set>> GetAllSetsAsync() => await _db.Sets.ToListAsync();
-        public async Task<Set?> GetSetByIdAsync(Guid id) => await _db.Sets.FindAsync(id);        
+        public async Task<Set?> GetSetByIdAsync(Guid id) => await _db.Sets.Include(f => f.Flashcards).FirstOrDefaultAsync(f => f.Id == id);        
         public async Task<Set> CreateSetAsync(Set setModel)
         {
             await _db.Sets.AddAsync(setModel);
@@ -44,5 +44,7 @@ namespace Repeet.Repositories
 
             return setModel;
         }
+
+        public async Task<bool> SetExists(Guid id) => await _db.Sets.AnyAsync(s => s.Id == id);
     }
 }

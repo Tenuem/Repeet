@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repeet.Dto;
 using Repeet.Models;
 using Repeet.Interfaces;
+using Repeet.Mappers;
 
 namespace Repeet.Controllers
 {
@@ -15,7 +16,7 @@ namespace Repeet.Controllers
         public async Task<ActionResult<IEnumerable<SetDto>>> GetAll()
         {
             var sets = await _repository.GetAllSetsAsync();
-            var setDtos = sets.Select(s => new SetDto(s.Id, s.Name));
+            var setDtos = sets.Select(s => s.ToDto());
 
             return Ok(setDtos);
         }
@@ -23,10 +24,10 @@ namespace Repeet.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SetDto>> Get(Guid id)
         {
-            var set = await _repository.GetSetByIdAsync(id);
+            var setModel = await _repository.GetSetByIdAsync(id);
 
-            return (set is null) ?
-                    NotFound() : Ok(new SetDto(set.Id, set.Name));
+            return (setModel is null) ?
+                    NotFound() : Ok(setModel.ToDto());
         }
 
         [HttpPost]
@@ -39,7 +40,7 @@ namespace Repeet.Controllers
             });
 
             // 201 response code
-            return CreatedAtAction(nameof(Get), new {id = setModel.Id}, new SetDto(setModel.Id, setModel.Name));
+            return CreatedAtAction(nameof(Get), new {id = setModel.Id}, setModel.ToDto());
         }
 
         [HttpPut("{id}")]
@@ -48,7 +49,7 @@ namespace Repeet.Controllers
             var setModel = await _repository.UpdateSetAsync(id, dto);
 
             return (setModel is null) ?
-                NotFound() : Ok(new SetDto(setModel.Id, setModel.Name));
+                NotFound() : Ok(setModel.ToDto());
         }
 
         [HttpDelete("{id}")]

@@ -17,7 +17,7 @@ namespace Repeet.Controllers
         {
             var flashcards = await _service.GetAllAsync();
 
-            return Ok(flashcards.Select(fsc => fsc.toDto()));
+            return Ok(flashcards.Select(fsc => fsc.ToDto()));
         }
 
         [HttpGet("{id}")]
@@ -26,22 +26,21 @@ namespace Repeet.Controllers
             var fsc = await _service.GetAsync(id);
 
             return (fsc is null) ?
-                    NotFound() : Ok(fsc.toDto());
+                    NotFound() : Ok(fsc.ToDto());
         }
 
-        [HttpPost]
+/*         [HttpPost]
         public async Task<ActionResult<FlashcardDto>> Create([FromBody] CreateFlashcardDto dto)
         {
             // Create a new model from DTO
             var fscModel = await _service.CreateAsync(new Flashcard {
-                Id = Guid.NewGuid(),
                 Keyword = dto.Keyword,
                 Definition = dto.Definition
             });
 
             // 201 response code
-            return CreatedAtAction(nameof(Get), new {id = fscModel.Id}, fscModel.toDto());
-        }
+            return CreatedAtAction(nameof(Get), new {id = fscModel.Id}, fscModel.ToDto());
+        } */
         
         [HttpPut("{id}")]
         public async Task<ActionResult<FlashcardDto>> Update([FromRoute] Guid id, [FromBody] UpdateFlashcardDto dto)
@@ -49,7 +48,7 @@ namespace Repeet.Controllers
             var fscModel = await _service.UpdateAsync(id, dto);
 
             return (fscModel is null) ?
-                NotFound() : Ok(fscModel.toDto());
+                NotFound() : Ok(fscModel.ToDto());
         }
 
         [HttpDelete("{id}")]

@@ -10,5 +10,7 @@ namespace Repeet.Interfaces
         Task<Flashcard> CreateAsync(Flashcard fsc);
         Task<Flashcard?> UpdateAsync(Guid fscId, UpdateFlashcardDto dto);
         Task<Flashcard?> DeleteAsync(Guid fscId);
+
+        Task<bool> SetExists(Guid id);
     }
 }
