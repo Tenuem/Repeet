@@ -12,7 +12,7 @@ POST {{HostAddress}}/sets
 Content-Type: application/json
 
 {
-    "name": "Motos" 
+    "name": "Boats" 
 }
 
 ### Update previously added set
@@ -28,6 +28,9 @@ DELETE {{HostAddress}}/sets/1a278731-40ee-48bf-8260-f75f04ebfb36
 
 ### Get all flashcards
 GET {{HostAddress}}/flashcards/
+
+### Get all flashcards by page
+GET {{HostAddress}}/flashcards?PageNumber=2&PageSize=2
 
 ### Get a new flashcard from the set
 GET {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7/flashcards/
@@ -46,7 +49,7 @@ POST {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7/flashcards/
 Content-Type: application/json
 
 {
-    "keyword": "zapatos",
+    "keyword": "farts",
     "definition": "buciory"
 }
 
@@ -61,3 +64,6 @@ Content-Type: application/json
 
 ### Delete the record with a given ID
 DELETE {{HostAddress}}/flashcards/2b7d54d8-abe2-41dd-9a52-b638902768b5
+
+### Get set with a name that contains 'Cars'
+GET {{HostAddress}}/sets?setName=Cars

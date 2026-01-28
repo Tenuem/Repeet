@@ -2,6 +2,7 @@ using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Repeet.Data;
 using Repeet.Dto;
+using Repeet.Helpers;
 using Repeet.Interfaces;
 using Repeet.Models;
 
@@ -11,7 +12,17 @@ namespace Repeet.Repositories
     {
         private readonly ApplicationDBContext _db = db;
 
-        public async Task<IEnumerable<Set>> GetAllSetsAsync() => await _db.Sets.ToListAsync();
+        public async Task<IEnumerable<Set>> GetAllSetsAsync(QueryObject query) 
+        {
+            var sets = _db.Sets.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SetName))
+                sets = sets.Where(s => s.Name.Contains(query.SetName));
+
+            sets = sets.OrderBy(s => s.Name);
+
+            return await sets.ToListAsync();
+        } 
         public async Task<Set?> GetSetByIdAsync(Guid id) => await _db.Sets.Include(f => f.Flashcards).FirstOrDefaultAsync(f => f.Id == id);        
         public async Task<Set> CreateSetAsync(Set setModel)
         {

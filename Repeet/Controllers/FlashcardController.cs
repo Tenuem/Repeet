@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Repeet.DTOs.Flashcard;
+using Repeet.Helpers;
 using Repeet.Interfaces;
 using Repeet.Mappers;
-using Repeet.Models;
 
 namespace Repeet.Controllers
 {
@@ -13,51 +13,41 @@ namespace Repeet.Controllers
         private readonly IFlashcardService _service = service;
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FlashcardDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<FlashcardDto>>> GetAll([FromQuery] QueryObject qo)
         {
-            var flashcards = await _service.GetAllAsync();
+            var flashcards = await _service.GetAllAsync(qo);
 
             return Ok(flashcards.Select(fsc => fsc.ToDto()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<FlashcardDto>> Get([FromRoute] Guid id)
         {
             var fsc = await _service.GetAsync(id);
 
             return (fsc is null) ?
-                    NotFound() : Ok(fsc.ToDto());
+                    NotFound("Flashcard does not exist") : Ok(fsc.ToDto());
         }
-
-/*         [HttpPost]
-        public async Task<ActionResult<FlashcardDto>> Create([FromBody] CreateFlashcardDto dto)
-        {
-            // Create a new model from DTO
-            var fscModel = await _service.CreateAsync(new Flashcard {
-                Keyword = dto.Keyword,
-                Definition = dto.Definition
-            });
-
-            // 201 response code
-            return CreatedAtAction(nameof(Get), new {id = fscModel.Id}, fscModel.ToDto());
-        } */
         
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult<FlashcardDto>> Update([FromRoute] Guid id, [FromBody] UpdateFlashcardDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+                
             var fscModel = await _service.UpdateAsync(id, dto);
 
             return (fscModel is null) ?
-                NotFound() : Ok(fscModel.ToDto());
+                NotFound("Flashcard does not exist") : Ok(fscModel.ToDto());
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var fscModel = await _service.DeleteAsync(id);
 
             return (fscModel is null) ?
-                NotFound() : NoContent();
+                NotFound("Flashcard does not exist") : NoContent();
         }
     }
 

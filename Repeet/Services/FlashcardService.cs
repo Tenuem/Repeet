@@ -1,4 +1,5 @@
 using Repeet.DTOs.Flashcard;
+using Repeet.Helpers;
 using Repeet.Interfaces;
 using Repeet.Models;
 
@@ -9,9 +10,9 @@ namespace Repeet.Services
         private readonly IFlashcardRepository _fscRepository = fscRepository;
         private readonly ISetRepository _setRepository = setRepository;
 
-        public async Task<IEnumerable<Flashcard>> GetAllAsync(Guid? setId = null)
+        public async Task<IEnumerable<Flashcard>> GetAllAsync(QueryObject query, Guid? setId = null)
         {
-            var flashcards = await _fscRepository.GetAllFlashcardsAsync();
+            var flashcards = await _fscRepository.GetAllFlashcardsAsync(query);
             if (setId is not null)
                 flashcards = flashcards.Where(fsc => fsc.SetId == setId);
 
