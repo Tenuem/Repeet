@@ -15,5 +15,6 @@ namespace Repeet.Interfaces
         
         // Helper methods
         Task<bool> SetExists(Guid id);
+        Task<bool> IsSetOwner(Guid setId, Guid ownerId);
     }
 }

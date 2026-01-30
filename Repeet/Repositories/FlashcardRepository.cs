@@ -14,6 +14,12 @@ namespace Repeet.Repositories
         public async Task<IEnumerable<Flashcard>> GetAllFlashcardsAsync(QueryObject query)
         {
             var flashcards = _db.Flashcards.AsQueryable();
+
+            if (query.Author != null)
+                flashcards = flashcards
+                            .Include(f => f.Set)
+                            .Where(f => f.Set!.OwnerId == query.Author);
+
             flashcards = flashcards.OrderBy(f => f.Keyword);
 
             var skip = (query.PageNumber - 1) * query.PageSize;
@@ -52,6 +58,13 @@ namespace Repeet.Repositories
             await _db.SaveChangesAsync();
 
             return fsModel;
+        }
+
+        public async Task<bool> IsFlashcardOwner(Guid flashcardId, Guid userId)
+        {
+            var flashcard = await _db.Flashcards.FirstOrDefaultAsync(f => f.Id == flashcardId);
+
+            return flashcard!.OwnerId == userId;
         }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Repeet.DTOs.Flashcard;
 using Repeet.Helpers;
 using Repeet.Interfaces;
@@ -5,10 +6,11 @@ using Repeet.Models;
 
 namespace Repeet.Services
 {
-    public class FlashcardService(IFlashcardRepository fscRepository, ISetRepository setRepository) : IFlashcardService
+    public class FlashcardService(IFlashcardRepository fscRepository, ISetRepository setRepository, UserManager<User> userManager) : IFlashcardService
     {
         private readonly IFlashcardRepository _fscRepository = fscRepository;
         private readonly ISetRepository _setRepository = setRepository;
+        private readonly UserManager<User> _userManager = userManager;
 
         public async Task<IEnumerable<Flashcard>> GetAllAsync(QueryObject query, Guid? setId = null)
         {
@@ -25,5 +27,13 @@ namespace Repeet.Services
         public async Task<Flashcard?> DeleteAsync(Guid fscId) => await _fscRepository.DeleteFlashcardByIdAsync(fscId);
 
         public async Task<bool> SetExists(Guid id) => await _setRepository.SetExists(id);
+        public async Task<bool> IsSetOwner(Guid setId, Guid ownerId) => await _setRepository.IsSetOwner(setId, ownerId);
+        public async Task<bool> IsFlashcardOwner(Guid id, string username) {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+                return false;
+                
+            return await _fscRepository.IsFlashcardOwner(id, user.Id);
+        } 
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repeet.DTOs.Flashcard;
 using Repeet.Helpers;
@@ -29,11 +30,21 @@ namespace Repeet.Controllers
                     NotFound("Flashcard does not exist") : Ok(fsc.ToDto());
         }
         
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FlashcardDto>> Update([FromRoute] Guid id, [FromBody] UpdateFlashcardDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var username = User.Identity!.Name;
+            if (username is null)
+                return BadRequest("You have to be logged in to update sets");
+
+            var isOwner = await _service.IsFlashcardOwner(id, username);
+
+            if (!isOwner)
+                return BadRequest("You can update only your sets");
                 
             var fscModel = await _service.UpdateAsync(id, dto);
 
@@ -41,16 +52,24 @@ namespace Repeet.Controllers
                 NotFound("Flashcard does not exist") : Ok(fscModel.ToDto());
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            // Check if this set belongs to the user
+            var username = User.Identity!.Name;
+            if (username is null)
+                return BadRequest("You have to be logged in to update sets");
+
+            var isOwner = await _service.IsFlashcardOwner(id, username);
+
+            if (!isOwner)
+                return BadRequest("You can delete only your sets");
+        
             var fscModel = await _service.DeleteAsync(id);
 
             return (fscModel is null) ?
                 NotFound("Flashcard does not exist") : NoContent();
         }
-    }
-
-
-    
+    }   
 }

@@ -7,6 +7,10 @@ Accept: application/json
 GET {{HostAddress}}/sets/cba6ee84-f5ef-4174-9302-cfead34d4aa7
 Accept: application/json
 
+### Get all sets from a specific user
+GET {{HostAddress}}/sets?author=1ECF8A9F-F4AD-47F2-A13E-08DE5F34625E
+Accept: application/json
+
 ### Create a new set
 POST {{HostAddress}}/sets
 Content-Type: application/json
@@ -20,7 +24,7 @@ PUT {{HostAddress}}/sets/569f6667-3ca4-4ac3-a405-7e8ab80c4c98
 Content-Type: application/json
 
 {
-    "name": "Body shots" 
+    "name": "Body parts" 
 }
 
 ### Delete the record with a given ID
@@ -28,6 +32,9 @@ DELETE {{HostAddress}}/sets/1a278731-40ee-48bf-8260-f75f04ebfb36
 
 ### Get all flashcards
 GET {{HostAddress}}/flashcards/
+
+### Get all flashcards from the author
+GET {{HostAddress}}/flashcards?author=1ECF8A9F-F4AD-47F2-A13E-08DE5F34625E
 
 ### Get all flashcards by page
 GET {{HostAddress}}/flashcards?PageNumber=2&PageSize=2

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repeet.Data;
 
@@ -11,9 +12,11 @@ using Repeet.Data;
 namespace Repeet.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260129124515_OwnerToSet")]
+    partial class OwnerToSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,15 +186,10 @@ namespace Repeet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("SetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("SetId");
 
@@ -337,17 +335,9 @@ namespace Repeet.Migrations
 
             modelBuilder.Entity("Repeet.Models.Flashcard", b =>
                 {
-                    b.HasOne("Repeet.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.HasOne("Repeet.Models.Set", "Set")
+                    b.HasOne("Repeet.Models.Set", null)
                         .WithMany("Flashcards")
                         .HasForeignKey("SetId");
-
-                    b.Navigation("Owner");
-
-                    b.Navigation("Set");
                 });
 
             modelBuilder.Entity("Repeet.Models.Set", b =>

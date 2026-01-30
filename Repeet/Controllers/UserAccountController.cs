@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -71,6 +72,18 @@ namespace Repeet.Controllers
                 return Unauthorized("Invalid username or password");
 
             return Ok(new CreateUserDto(user.UserName, user.Email, _tokenService.CreateToken(user))); 
+        }
+
+        // helper endpoint
+        [Authorize]
+        [HttpGet("whoami")]
+        public IActionResult WhoAmI()
+        {
+            return Ok(new
+            {
+                User.Identity?.Name,
+                Claims = User.Claims.Select(c => new { c.Type, c.Value })
+            });
         }
     }
 }

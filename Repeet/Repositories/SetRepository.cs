@@ -19,11 +19,16 @@ namespace Repeet.Repositories
             if (!string.IsNullOrWhiteSpace(query.SetName))
                 sets = sets.Where(s => s.Name.Contains(query.SetName));
 
+            if (query.Author != null)
+                sets = sets.Where(s => s.OwnerId.Equals(query.Author));
+            
             sets = sets.OrderBy(s => s.Name);
+            sets = sets.Include(s => s.Owner);
 
             return await sets.ToListAsync();
         } 
-        public async Task<Set?> GetSetByIdAsync(Guid id) => await _db.Sets.Include(f => f.Flashcards).FirstOrDefaultAsync(f => f.Id == id);        
+        public async Task<Set?> GetSetByIdAsync(Guid id) => 
+            await _db.Sets.Include(s => s.Owner).Include(f => f.Flashcards).FirstOrDefaultAsync(f => f.Id == id);        
         public async Task<Set> CreateSetAsync(Set setModel)
         {
             await _db.Sets.AddAsync(setModel);
@@ -57,5 +62,12 @@ namespace Repeet.Repositories
         }
 
         public async Task<bool> SetExists(Guid id) => await _db.Sets.AnyAsync(s => s.Id == id);
+
+        public async Task<bool> IsSetOwner(Guid setId, Guid ownerId)
+        {
+            var set = await _db.Sets.FirstOrDefaultAsync(s => s.Id == setId);
+            
+            return set!.OwnerId == ownerId;
+        }
     }
 }

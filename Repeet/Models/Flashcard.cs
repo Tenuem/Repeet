@@ -6,5 +6,8 @@ namespace Repeet.Models
         public string Keyword { get; set; } = string.Empty;
         public string Definition { get; set; } = string.Empty;
         public Guid? SetId { get; set; }
+        public Set? Set { get; set; }
+        public Guid? OwnerId { get; set; }
+        public User? Owner { get; set; }
     }
 }
