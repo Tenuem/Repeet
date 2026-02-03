@@ -6,7 +6,6 @@ import SetGrid from "../Components/Set/SetGrid";
 import { useSearchParams } from "react-router-dom";
 import SetDetails from "./SetDetails.tsx"
 import Searchbar from "../Components/Layout/Searchbar.tsx";
-import SetList from "../Components/Set/SetList.tsx";
 
 type Props = {}
 
@@ -59,8 +58,8 @@ const Explore : React.FC<Props> = () : JSX.Element => {
         getDetailedSet();
     }, [setid, hasQuery]);
 
-    const getSets = (nameQuery:string = "") => {
-        setGetAPI(nameQuery)
+    const getSets = async (nameQuery:string = "") => {
+        await setGetAPI(nameQuery)
         .then((res) => {
             if (res?.data) {
                 setSearchedSets(res?.data);

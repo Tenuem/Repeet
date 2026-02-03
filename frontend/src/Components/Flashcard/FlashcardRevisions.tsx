@@ -1,23 +1,28 @@
 import React, { useState, type ChangeEvent, type JSX } from "react";
 
 type Props = {
-    keyword: string;
-    definition: string;
+    id: string,
+    keyword: string,
+    definition: string,
+    isAnswered: boolean,
+    handleRevision: (rating: number, id: string) => void;
+    toggleIsAnwered: () => void;
 };
+
 // swipe'y fiszek
-const FlashcardRevisions : React.FC<Props> = ({keyword, definition}: Props) : JSX.Element => {
+const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswered, handleRevision, toggleIsAnwered}: Props) : JSX.Element => {
     const [answer, setAnswer] = useState<string>("");
-    const [isAnswered, setIsAnswerd] = useState(false);
     const [hints, setHints] = useState<number>(0);
-    const [borderStyle, setBorderStyle] = useState("");
+    const [borderStyle, setBorderStyle] = useState<string>("");
+    const [animation, setAnimation] = useState<React.CSSProperties>({});
 
     const [correctSubstring, setCorrectSubstring] = useState<string>("");
     const [incorrectSubstring, setInorrectSubstring] = useState<string>("");
 
-    const handleAnswer = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+    const handleAnswerChange = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
         if (e.target.value.includes('0')){
             let correct = findCommonStart(answer, definition);
-            if (correct.length == definition.length - 1)
+            if (correct.length >= definition.length - 1)
                 checkAnswer(true);
             else {
                 setAnswer(correct + definition.charAt(correct.length))
@@ -34,52 +39,117 @@ const FlashcardRevisions : React.FC<Props> = ({keyword, definition}: Props) : JS
             checkAnswer();
         }
     }
+    
+    const animateAfterRevision = (rating: number, id:string) => {
+        if (rating > 1){
+            setAnimation({
+                transform: 'translateX(1200px) rotate(20deg)',
+                transition: 'all 250ms ease-out'
+            });
+            
+        } else {
+            setAnimation({
+                transform: 'translateX(-1200px) rotate(-30deg)',
+                transition: 'all 250ms ease-out'
+            });
+        }   
+            
+        setHints(0);
+        setBorderStyle("");
+        setAnswer("");
+        toggleIsAnwered();
+        // animation time
+        setTimeout(() => setAnimation({}), 250);
+        setTimeout(() => handleRevision(rating, id), 250);
+    }
 
     const checkAnswer = (lastLetter: Boolean = false) => {
 
-        setIsAnswerd(true);
+        toggleIsAnwered();
+        
+
+        let differences = answer.length === definition.length ? countStringDifferences(answer, definition) : -1;
+        // if there is one char lenght of difference (shorter or longer)
+        // but the substring is equal
+        if ((answer.length === definition.length + 1 || answer.length + 1 === definition.length) && 
+            (countStringDifferences(answer, definition) === 0 && countStringDifferences(definition, answer) === 0))
+            differences = 1;
+
+        let hintCount = hints;
         let correct = definition;
         if (!lastLetter){
             correct = findCommonStart(answer, definition);
+            console.log(correct, answer, definition);
             setCorrectSubstring(correct);
-            setInorrectSubstring(answer.replace(correct, ""));
+            if (differences === 0)
+                setInorrectSubstring("");
+            else if (differences === 1)
+                setInorrectSubstring(answer.slice(correct.length))
+        } else {
+            // the last hint not added if it was the last letter
+            hintCount = hints + 1;
+            setCorrectSubstring(definition);
+            setInorrectSubstring("");
         }
-        let hintCount = lastLetter ? hints + 1 : hints;
-
-        if (hintCount > 1 || correct != definition || answer.length > definition.length)
+        
+        if (hintCount > 1) 
             setBorderStyle("border-red-500 border-3");
-        else {
-            if (hintCount == 0)
+        else if (hintCount == 0)
+        {
+            if (differences === 0)
                 setBorderStyle("border-[var(--highlight-mint)] border-3");
-            if (hintCount == 1)
+            else if (differences === 1)
                 setBorderStyle("border-orange-500 border-3");
+            else 
+                setBorderStyle("border-red-500 border-3");
         }
-        console.log(hintCount);        
-    }
+        else if (hintCount == 1 && (differences == 0 || (lastLetter && differences == 1)))
+            setBorderStyle("border-orange-500 border-3");
+        else 
+            setBorderStyle("border-red-500 border-3");
+    }      
+
 
     function findCommonStart(str1: string, str2: string): string {
         let common = '';
         const maxLength = Math.min(str1.length, str2.length);
         
-        for (let i = 0; i < maxLength; i++) {
-            if (str1[i] === str2[i]) {
-            common += str1[i];
+        let i = 0;
+        for (; i < maxLength; i++) {
+            if (str1[i].toLowerCase() === str2[i].toLowerCase()) {
+                common += str1[i];
             } else 
                 break;
         }
-        return common;
+        return str2.slice(0,i);
+    }
+
+    function countStringDifferences(str1: string, str2: string): number {
+        let common = '';
+        const maxLength = Math.min(str1.length, str2.length);
+        
+        let i = 0;
+        let dif = 0;
+        for (; i < maxLength; i++) {
+            if (str1[i].toLowerCase() === str2[i].toLowerCase()) {
+                common += str1[i];
+            } else 
+                dif = dif+1;
+        }
+        return dif;
     }
 
     return (
-        <div className={`rounded-2xl flex flex-col items-center justify-center p-6 shadow-xl ${borderStyle}
+        <>
+        <div style={animation} className={`rounded-2xl flex flex-col items-center justify-center p-6 shadow-xl ${borderStyle}
                         aspect-[7/4] w-2/5
-                        top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--foreground)]`}>
+                        top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)] bg-[var(--foreground)]`}>
             <div className='flex items-center justify-center w-full'>
                 <h2 className='italic text-4xl justify-between'>{keyword}</h2>
             </div>
-            <hr className={`border-t border-[var(--foreground)] my-10 w-4/5`} />
+            <hr className={`border-t border-[var(--background)] my-10 w-4/5`} />
             {!isAnswered ? (
-                <input className="text-3xl w-3/5 focus:outline-none " placeholder='Answer' value={answer} onChange={handleAnswer} onKeyDown={handleKeyDown}></input>
+                <input className="text-3xl w-3/5 focus:outline-none " placeholder='Answer' value={answer} onChange={handleAnswerChange} onKeyDown={handleKeyDown}></input>
             ) : (
                 <div className="flex flex-col justify-left w-3/5">
                     <div className="flex">
@@ -94,6 +164,15 @@ const FlashcardRevisions : React.FC<Props> = ({keyword, definition}: Props) : JS
                 </div>
             )}
         </div>
+        {isAnswered && (
+            <div className="flex w-2/5 bottom-1/10 left-1/2 -translate-x-1/2 absolute items-center justify-between">
+                <button onClick={() => animateAfterRevision(1, id)} className="bg-red-500 w-1/3 rounded-3xl text-xl text-[var(--background)] py-2">Bad</button>
+                <button onClick={() => animateAfterRevision(2, id)} className="bg-orange-500 w-1/3 rounded-3xl text-xl text-[var(--background)] py-2 mx-2">Almost</button>
+                <button onClick={() => animateAfterRevision(3, id)} className="bg-[var(--highlight-mint)] w-1/3 rounded-3xl text-xl text-[var(--background)] py-2">Good</button>
+            </div>
+        )}
+        
+        </>
     )
 }
 

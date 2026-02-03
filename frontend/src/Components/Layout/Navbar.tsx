@@ -1,6 +1,12 @@
+import type { JSX } from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+
+const Navbar = ({popup} : any) : JSX.Element => {
+
+  const handleCreate = () => {
+    popup(true);
+  }
 
   return (
     <nav className="shadow ">
@@ -12,7 +18,7 @@ export default function Navbar() {
           <Link to="/games/" className="text-lg hover:scale-105 px-4">GAMES</Link>
         </div>
         <div>
-          <button className="px-4 bg-[var(--highlight-mint)] hover:scale-105 mx-4 text-white rounded hover:cursor-pointer">+ NEW</button>
+          <button onClick={handleCreate} className="px-4 bg-[var(--highlight-mint)] hover:scale-105 mx-4 text-white rounded hover:cursor-pointer">+ NEW</button>
           <button className="px-4 border-2  border-[var(--secondary-dark)] hover:scale-105 text-[var(--secondary-dark)] rounded
                              hover:bg-[var(--secondary-dark)] transition-colors hover:text-[var(--background)] hover:cursor-pointer">SIGN IN</button>
         </div>
@@ -20,3 +26,4 @@ export default function Navbar() {
     </nav>
   );
 }
+export default Navbar;
