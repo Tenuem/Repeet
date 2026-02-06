@@ -1,11 +1,11 @@
 import { useEffect, useState, type ChangeEvent, type JSX, type SyntheticEvent } from "react";
 import { setDetailsGetAPI, setGetAPI } from "../Services/SetService";
 import type { SetDetailedGet, SetGet } from "../Models/Set";
-//import SetList from "../Components/Set/SetList";
 import SetGrid from "../Components/Set/SetGrid";
 import { useSearchParams } from "react-router-dom";
 import SetDetails from "./SetDetails.tsx"
 import Searchbar from "../Components/Layout/Searchbar.tsx";
+import { handleError } from "../Helpers/ErrorHandler.tsx";
 
 type Props = {}
 
@@ -45,13 +45,11 @@ const Explore : React.FC<Props> = () : JSX.Element => {
             .then((res) => {
                 if (res?.data) {
                     setSetData(res?.data);
-                    console.log(res?.data);
                 }
             })
             .catch((e) => {
                 setSetData(null);
-                // handle error todo
-                console.log(e);
+                handleError(e);
             }); 
         }
 
@@ -63,13 +61,11 @@ const Explore : React.FC<Props> = () : JSX.Element => {
         .then((res) => {
             if (res?.data) {
                 setSearchedSets(res?.data);
-                //console.log(res?.data);
             }
         })
         .catch((e) => {
             setSearchedSets(null);
-            // handle error todo
-            console.log(e);
+            handleError(e);
         });   
     };
 

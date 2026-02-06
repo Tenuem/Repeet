@@ -1,17 +1,19 @@
 import { useEffect, useState, type ChangeEvent, type JSX, type SyntheticEvent } from "react";
-import { addSetAPI, fullSetsGetAPI, setDetailsGetAPI, setGetAPI } from "../../Services/SetService";
+import { fullSetsGetAPI } from "../../Services/SetService";
 import type { SetDetailedGet } from "../../Models/Set";
+import { handleError } from "../../Helpers/ErrorHandler";
 
 
 interface Props {
     setBlur: (val: boolean) => void;
     handleOnFormSubmit: (e: any) => void;
+    setSelectedSetId: (val: string) => void;
+    isNewSet: () => boolean;
+    newSetString: string;
 }
 
-const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit}) : JSX.Element => {
-    const createNewSetString = "createNew";
+const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedSetId, isNewSet, newSetString}) : JSX.Element => {
     const [sets, setSets] = useState<SetDetailedGet[] | null >([]);
-    const [selectedSetId, setSelectedSetId] = useState<string>(createNewSetString);
     const [chosenSet, setChosenSet] = useState<SetDetailedGet | null>(null);
 
     const [newKeywords, setNewKeywords] = useState<string[]>([]);
@@ -22,26 +24,26 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit}) : JSX.Eleme
         fullSetsGetAPI()
         .then((res) => {
             if (res?.data) {
-                setSets(res?.data);
+                // TODO filter to only user sets
+                setSets(res?.data); 
             }
         })
         .catch((e) => {
             setSets(null);
-            // handle error todo
-            console.log(e);
+            handleError(e);
         });        
     }, []);
 
     const handleSetSelection = (e: ChangeEvent<HTMLSelectElement, HTMLSelectElement>) => {
         const id = e.target.value;
         setSelectedSetId(id);
-        if (id === createNewSetString || !sets){
+        console.log("id " + id);
+        if (id === newSetString || !sets){
             setChosenSet(null);
             return;
         }
         const set = sets.find(s => s.id === id);
         set ? setChosenSet(set) : setChosenSet(null);
-        console.log(chosenSet);
     }
 
     const handleAddNew = (e: SyntheticEvent) => {
@@ -70,14 +72,18 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit}) : JSX.Eleme
 
     return (
         <div className='w-1/4 max-h-3/4 flex flex-col bg-[var(--foreground)] mx-auto 
-                rounded-3xl shadow-3xl p-6 overflow-clip
-                top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)]'>
-            <p onClick={() => setBlur(false)} className='text-left text-xl hover:cursor-pointer h-1/10 font-semibold'>x</p>
+                rounded-3xl shadow-3xl p-6 overflow-clip 
+                top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)]'
+                style={{
+                    backdropFilter: 'blur(5px)',
+                    WebkitBackdropFilter: 'blur(5px)',  
+                }}>
+            <p onClick={() => setBlur(false)} className='text-left text-xl hover:cursor-pointer h-1/10 w-1/10 font-semibold'>x</p>
 
             <form className='w-full h-4/5 flex flex-col space-y-4' onSubmit={handleOnFormSubmit}>
                 <label htmlFor="setSelect" className="text-slate-100/50 text-sm mb-1">Choose set</label>
                 <select id="setSelect" onChange={handleSetSelection} className="border p-2 rounded text-[var(--foreground)] bg-[var(--background)]">
-                    <option key={1} value={createNewSetString}>Create new</option>
+                    <option key={1} value={newSetString}>Create new</option>
                     { sets &&
                         sets.length > 0 &&
                             sets.map(set => {
@@ -88,7 +94,7 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit}) : JSX.Eleme
                     }
                 </select>
                 
-                {selectedSetId === createNewSetString ? (
+                {isNewSet() ? (
                     <>
                         <label htmlFor="setName" className="text-slate-100/50 text-sm mb-1">Name of the new set</label>
                         <input type="text" id="setName" required className="border-b text-lg focus:outline-none"/>

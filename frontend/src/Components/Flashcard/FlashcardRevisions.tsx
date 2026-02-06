@@ -66,7 +66,6 @@ const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswer
     const checkAnswer = (lastLetter: Boolean = false) => {
 
         toggleIsAnwered();
-        
 
         let differences = answer.length === definition.length ? countStringDifferences(answer, definition) : -1;
         // if there is one char lenght of difference (shorter or longer)
@@ -79,11 +78,11 @@ const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswer
         let correct = definition;
         if (!lastLetter){
             correct = findCommonStart(answer, definition);
-            console.log(correct, answer, definition);
+            console.log(typeof(correct), answer, definition);
             setCorrectSubstring(correct);
             if (differences === 0)
                 setInorrectSubstring("");
-            else if (differences === 1)
+            else
                 setInorrectSubstring(answer.slice(correct.length))
         } else {
             // the last hint not added if it was the last letter
