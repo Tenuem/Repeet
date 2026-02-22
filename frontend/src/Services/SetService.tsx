@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { SetDetailedGet, SetGet, SetPost } from "../Models/Set";
+import type { SetDetailedGet, SetGet, SetPost, SetPut } from "../Models/Set";
 import { handleError } from "../Helpers/ErrorHandler";
 
 const api = "http://localhost:5136/sets";
@@ -35,7 +35,15 @@ export const fullSetsGetAPI = async () => {
 export const addSetAPI = async (setname: string) => {
   try {
       const data = await axios.post<SetPost>(api, {name: setname});
-      console.log(data);
+      return data;
+  } catch (error){
+      handleError(error);
+  }
+};
+
+export const updateSetAPI = async (setid: string, setname: string) => {
+  try {
+      const data = await axios.put<SetPut>(api + `/${setid}`, {name: setname});
       return data;
   } catch (error){
       handleError(error);

@@ -83,8 +83,8 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedS
             <form className='w-full h-4/5 flex flex-col space-y-4' onSubmit={handleOnFormSubmit}>
                 <label htmlFor="setSelect" className="text-slate-100/50 text-sm mb-1">Choose set</label>
                 <select id="setSelect" onChange={handleSetSelection} className="border p-2 rounded text-[var(--foreground)] bg-[var(--background)]">
-                    <option key={1} value={newSetString}>Create new</option>
-                    { sets &&
+                    <option key={newSetString} value={newSetString}>Create new</option>
+                    {sets &&
                         sets.length > 0 &&
                             sets.map(set => {
                                 return (
@@ -112,8 +112,8 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedS
                                 {chosenSet.flashcards.map(f => {
                                     return (
                                         <div className="flex w-17/18 my-0 text-slate-800 bg-slate-100/80 rounded-sm">
-                                            <p className="w-1/2 m-0 border pl-2">{f.keyword}</p>
-                                            <p className="w-1/2 m-0 border pl-2">{f.definition}</p>
+                                            <p className="w-1/2 m-0 border pl-2" key={`k${f.id}`}>{f.keyword}</p>
+                                            <p className="w-1/2 m-0 border pl-2" key={`d${f.id}`}>{f.definition}</p>
                                         </div>
                                     )                
                                 })} 
@@ -122,7 +122,9 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedS
                             <p className="ml-2 text-slate-100/50 text-sm mb-1">No flashcards yet</p>
                         )
                 )}
+                
                 {chosenSet && chosenSet.flashcards.length > 0 && <hr className={`border-t border-[var(--highlight-mint)] w-16/17 my-1`} />}
+
                 {newKeywords.map((value, index) => {
                     const definition = newDefinitions.at(index);
                     return (

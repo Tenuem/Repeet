@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { FlashcardGet, FlashcardPost } from "../Models/Flashcard";
+import type { FlashcardGet, FlashcardPost, FlashcardPut } from "../Models/Flashcard";
 import { handleError } from "../Helpers/ErrorHandler";
 //import { handleError } from "../Helpers/ErrorHandler";
 
@@ -21,6 +21,27 @@ export const addFlashcardApi = async (keyword: string, definition: string, setId
         keyword: keyword,
         definition: definition
       });
+      return data;
+  } catch (error) {
+      handleError(error);
+  }
+}
+
+export const updateFlashcardApi = async (keyword: string, definition: string, fId: string) => {
+  try {
+      const data = await axios.put<FlashcardPut>(api + `/${fId}`, {
+        keyword: keyword,
+        definition: definition
+      });
+      return data;
+  } catch (error) {
+      handleError(error);
+  }
+}
+
+export const deleteFlashcardApi = async (id: string) => {
+  try {
+      const data = await axios.delete<FlashcardPut>(api + `/${id}`);
       return data;
   } catch (error) {
       handleError(error);

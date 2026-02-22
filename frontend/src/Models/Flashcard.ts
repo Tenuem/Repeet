@@ -9,3 +9,8 @@ export type FlashcardPost = {
     definition: string,
     setId: string
 }
+
+export type FlashcardPut = {
+    keyword: string,
+    definition: string
+}

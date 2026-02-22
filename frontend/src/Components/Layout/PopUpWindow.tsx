@@ -38,12 +38,15 @@ const CreateNewPopUpWindow : React.FC<Props> = ({ setBlur } : Props) : JSX.Eleme
 
     // add each flashcard to the set
     const set = !isNewSet() ? selectedSetId : setData!.id;
-    const startIndex = !isNewSet() ? 3 : 2;
+    const startIndex = !isNewSet() ? 1 : 2;
+    console.log(startIndex);
     for (let i=0; i<numOfFlashcards; i++){
       const keyword = e.target[startIndex + i*3].value;
       const definition = e.target[startIndex + i*3 + 1].value;
+      console.log(keyword, definition);
       await addFlashcardApi(keyword, definition, set);
     }
+    setBlur(false);
   }
 
   const isNewSet = () => {

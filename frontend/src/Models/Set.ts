@@ -10,6 +10,10 @@ export type SetPost = {
     name: string
 }
 
+export type SetPut = {
+    name: string
+}
+
 export type SetDetailedGet = {
     id: string;
     name: string;
