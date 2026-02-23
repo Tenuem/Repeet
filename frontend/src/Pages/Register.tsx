@@ -36,10 +36,10 @@ const RegisterPage = () => {
     };
 
   return (
-    <div className="w-1/4 max-h-3/4 flex flex-col bg-[var(--foreground)] mx-auto 
-                rounded-3xl shadow-3xl p-6 overflow-clip
+    <div className="w-3/4 md:w-1/2 lg:w-1/3 flex flex-col bg-[var(--foreground)] mx-auto 
+                rounded-3xl shadow-3xl px-6 pt-6 overflow-clip
                 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)]'">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6 w-full">
 
         <div className="w-full">
             <input
@@ -86,7 +86,8 @@ const RegisterPage = () => {
             {isSubmitting ? 'We are saving your data...' : 'Sign up'}
         </button>
         </form>
-        <div className="text-slate-100/50 flex items-center justify-center w-full my-1">
+        <div className="text-slate-100/50 flex items-center justify-center w-full 
+            flex-col lg:flex-row md:my-2 mb-2 lg:my-4 md:text-lg">
             <p className="px-1">Have already an account? </p>
             <p onClick={() => navigate("/login")} className="px-1 hover:text-[var(--highlight-fuchsia)] hover:cursor-pointer">Log in here!</p>
         </div>

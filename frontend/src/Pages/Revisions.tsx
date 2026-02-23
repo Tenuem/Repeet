@@ -70,20 +70,18 @@ const Revisions : React.FC<Props> = () : JSX.Element => {
     }, [])
 
     return (
-        <div className="overflow-clip min-w-full min-h-[calc(100vh-200px)] relative flex flex-col items-center">
-            <h2 className="text-xl font-bold top-1/5 absolute">{answeredCorrectlyNumber}/{totalRevisionsNumber} mastered!</h2>
+        <>  
             {data && data.length > 0 ? (
                 data.map((f) => {
                     return (                
                             <FlashcardRevisions key={f.id} id={f.id} keyword={f.keyword} definition={f.definition} 
-                                handleRevision={handleFlashcardRevision} isAnswered={isAnswered} toggleIsAnwered={toggleIsAnwered}/>  
+                                handleRevision={handleFlashcardRevision} isAnswered={isAnswered} toggleIsAnwered={toggleIsAnwered} answered={answeredCorrectlyNumber} total={totalRevisionsNumber}/>  
                         )
                 })
             ) : (
                 <p className="text-center text-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">All revisions done! Congratulations!</p>
-            )}
-            
-        </div>
+            )}         
+        </>
         
     )
 }

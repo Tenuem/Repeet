@@ -7,10 +7,12 @@ type Props = {
     isAnswered: boolean,
     handleRevision: (rating: number, id: string) => void;
     toggleIsAnwered: () => void;
+    answered: number;
+    total: number;
 };
 
 // swipe'y fiszek
-const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswered, handleRevision, toggleIsAnwered}: Props) : JSX.Element => {
+const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswered, handleRevision, toggleIsAnwered, answered, total}: Props) : JSX.Element => {
     const [answer, setAnswer] = useState<string>("");
     const [hints, setHints] = useState<number>(0);
     const [borderStyle, setBorderStyle] = useState<string>("");
@@ -139,39 +141,52 @@ const FlashcardRevisions : React.FC<Props> = ({id, keyword, definition, isAnswer
     }
 
     return (
-        <>
-        <div style={animation} className={`rounded-2xl flex flex-col items-center justify-center p-6 shadow-xl ${borderStyle}
-                        aspect-[7/4] w-2/5
-                        top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)] bg-[var(--foreground)]`}>
-            <div className='flex items-center justify-center w-full'>
-                <h2 className='italic text-4xl justify-between'>{keyword}</h2>
-            </div>
-            <hr className={`border-t border-[var(--background)] my-10 w-4/5`} />
-            {!isAnswered ? (
-                <input className="text-3xl w-3/5 focus:outline-none " placeholder='Answer' value={answer} onChange={handleAnswerChange} onKeyDown={handleKeyDown}></input>
-            ) : (
-                <div className="flex flex-col justify-left w-3/5">
-                    <div className="flex">
-                        <h2 className='text-3xl'>{correctSubstring}</h2>
-                        <h2 className='text-3xl text-red-500'>{incorrectSubstring}</h2>
-                    </div>
-                    <div>
-                        {correctSubstring !== definition && (
-                            <h2 className='text-3xl'>{definition}</h2>
-                        )} 
-                    </div>                
+        <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col w-4/5 h-3/5 items-center justify-center">
+            <>
+            <h2 className="text-[var(--foreground)] opacity-30 text-base md:text-xl w-full md:w-5/7 xl:w-2/5 text-right mx-auto pr-3">correct: {answered}/{total}</h2>
+
+            <div style={animation} className={`rounded-2xl flex flex-col items-center justify-center shadow-xl ${borderStyle}
+                            aspect-[4/5] w-full
+                            md:aspect-[7/4] sm:w-7/10 md:w-5/7 xl:w-2/5
+                            my-5 text-[var(--background)] bg-[var(--foreground)]`}>
+
+                <div className='flex items-center justify-center w-full h-1/2 py-2'>
+                    <h2 className='italic text-3xl sm:text-4xl justify-between'>{keyword}</h2>
                 </div>
-            )}
-        </div>
-        {isAnswered && (
-            <div className="flex w-2/5 bottom-1/10 left-1/2 -translate-x-1/2 absolute items-center justify-between">
-                <button onClick={() => animateAfterRevision(1, id)} className="bg-red-500 w-1/3 rounded-3xl text-xl text-[var(--background)] py-2">Bad</button>
-                <button onClick={() => animateAfterRevision(2, id)} className="bg-orange-500 w-1/3 rounded-3xl text-xl text-[var(--background)] py-2 mx-2">Almost</button>
-                <button onClick={() => animateAfterRevision(3, id)} className="bg-[var(--highlight-mint)] w-1/3 rounded-3xl text-xl text-[var(--background)] py-2">Good</button>
+
+                <hr className={`border-t border-[var(--background)] w-4/5`} />
+
+                {!isAnswered ? (
+                    <input className="text-2xl sm:text-3xl w-3/5 focus:outline-none h-1/2 py-2" 
+                        placeholder='Answer' value={answer} onChange={handleAnswerChange} onKeyDown={handleKeyDown}></input>
+                ) : (
+                    <div className="flex flex-col justify-center w-3/5 h-1/2 py-2">
+                        <div className="flex">
+                            <h2 className='text-2xl sm:text-3xl'>{correctSubstring}</h2>
+                            <h2 className='text-2xl sm:text-3xl text-red-500'>{incorrectSubstring}</h2>
+                        </div>
+                        <div>
+                            {correctSubstring !== definition && (
+                                <h2 className='text-2xl sm:text-3xl'>{definition}</h2>
+                            )} 
+                        </div>                
+                    </div>
+                )}
             </div>
-        )}
-        
-        </>
+            
+                <div className="flex w-full items-center justify-between h-1/5 md:w-5/7 xl:w-2/5">
+                {isAnswered && (
+                    <>
+                    <button onClick={() => animateAfterRevision(1, id)} className="bg-red-500 rounded-3xl text-[var(--background)] py-2
+                        text-lg w-1/3">Bad</button>
+                    <button onClick={() => animateAfterRevision(2, id)} className="bg-orange-500 w-1/3 rounded-3xl text-xl text-[var(--background)] py-2 mx-2">Almost</button>
+                    <button onClick={() => animateAfterRevision(3, id)} className="bg-[var(--highlight-mint)] w-1/3 rounded-3xl text-xl text-[var(--background)] py-2">Good</button>
+                    </>
+                )}
+                </div>
+            
+            </>
+        </div>
     )
 }
 
