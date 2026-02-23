@@ -5,6 +5,7 @@ import Revisions from "../Pages/Revisions";
 import LoginPage from "../Pages/Login";
 import RegisterPage from "../Pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
+import AccountPage from "../Pages/AccountPage";
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +18,6 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "games", element: <div>We are currently working on the new features for you!</div> },
+      { path: "myaccount", element: <ProtectedRoute><AccountPage /></ProtectedRoute>}
     ]
   }])

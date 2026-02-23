@@ -35,20 +35,20 @@ const LoginPage = () => {
     };
 
   return (
-    <div className="w-1/4 max-h-3/4 flex flex-col bg-[var(--foreground)] mx-auto 
-                rounded-3xl shadow-3xl p-6 overflow-clip
+    <div className="w-3/4 md:w-1/2 xl:w-1/3 flex flex-col bg-[var(--foreground)] mx-auto 
+                rounded-3xl shadow-3xl px-6 pt-6 overflow-clip
                 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute text-[var(--background)]'">
         <form onSubmit={handleSubmit(onSubmit)} 
-            className="space-y-4 w-full">
+            className="space-y-4 md:space-y-6 w-full">
         <div className="w-full">
             <input
                 {...register('username')}
                 type="text"
                 placeholder="Username"
-                className="border p-2 w-full bg-[var(--background)] rounded-xl"
+                className="border p-2 w-full bg-[var(--background)] rounded-xl lg:rounded-2xl md:text-xl lg:text-2xl md:h-16 lg:h-18"
             />
             {errors.username && (
-                <p className="text-red-500 text-sm">{errors.username.message}</p>
+                <p className="text-red-500 m-1 text-sm md:text-base ">{errors.username.message}</p>
             )}
         </div>
         
@@ -57,10 +57,10 @@ const LoginPage = () => {
                 {...register('password')}
                 type="password"
                 placeholder="Password"
-                className="border p-2 w-full bg-[var(--background)] rounded-xl"
+                className="border p-2 w-full bg-[var(--background)] rounded-xl lg:rounded-2xl md:text-xl lg:text-2xl md:h-16 lg:h-18"
             />
             {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password.message}</p>
+                <p className="text-red-500 m-1 text-sm md:text-base ">{errors.password.message}</p>
             )}
         </div>
         
@@ -69,13 +69,16 @@ const LoginPage = () => {
         )}
         
         <button type="submit" disabled={isSubmitting}
-            className="bg-[var(--highlight-mint)] w-full text-white p-2 rounded-xl disabled:opacity-50">
+            className="bg-[var(--highlight-mint)] w-full text-white p-2 rounded-xl disabled:opacity-50 hover:cursor-pointer
+                lg:rounded-2xl md:text-xl lg:text-2xl md:h-14 lg:h-16">
             {isSubmitting ? 'Logging in...' : 'Login'}
         </button>
         </form>
-        <div className="text-slate-100/50 flex items-center justify-center w-full my-1">
+        <div className="text-slate-100/50 flex items-center justify-center w-full my-1 text-sm flex-col 
+            md:text-lg lg:text-xl md:my-2 mb-2 lg:my-4">
             <p className="px-1">Don't have an account yet? </p>
-            <p onClick={() => navigate("/register")} className="px-1 hover:text-[var(--highlight-fuchsia)] hover:cursor-pointer">Create one now!</p>
+            <p onClick={() => navigate("/register")} className="px-1 hover:scale-105 hover:text-[var(--highlight-fuchsia)] hover:cursor-pointer 
+                ">Create one now!</p>
         </div>
     </div>
   );
