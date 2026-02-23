@@ -127,24 +127,24 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
         
         <>  
             <div className="flex items-center justify-between">
-                <div className="flex items-center">
+                <div className="flex items-center text-lg lg:text-2xl">
                     {setnameEditable ? (
-                        <input onChange={(e) => setSetname(e.target.value)} value={setname} className="text-2xl mr-5 ml-2 focus:outline-none"/>
+                        <input onChange={(e) => setSetname(e.target.value)} value={setname} className="ml-2 max-w-3/5 focus:outline-none"/>
                     ) : (
-                        <p className="text-2xl mr-5 ml-2 font-bold">{setname}</p>
+                        <p className="ml-2 font-bold">{setname}</p>
                     )}                    
                     {user && user.username === set.authorUsername && (
                         setnameEditable ? (
-                            <button onClick={handleSetnameChange} className="text-lg mr-5 ml-2 hover:cursor-pointer">✔️</button>                   
+                            <button onClick={handleSetnameChange} className="ml-2 text-base lg:text-xl hover:cursor-pointer">✔️</button>                   
                         ) : (                   
-                            <button onClick={() => setSetnameEditable(true)} className="text-lg mr-5 ml-2 hover:cursor-pointer">✏️</button>)
+                            <button onClick={() => setSetnameEditable(true)} className="ml-2 text-base lg:text-xl hover:cursor-pointer">✏️</button>)
                         )                    
                     }
                 </div>
                 {user && user.username === set.authorUsername ? (
-                    <p className="text-sm font-light">Made by: {set.authorUsername} (you)</p>
+                    <p className="text-xs sm:text-sm font-light">Made by: <br />{set.authorUsername} (you)</p>
                 ) : (
-                    <p className="text-sm font-light">Made by: {set.authorUsername}</p>
+                    <p className="text-xs sm:text-sm font-light">Made by: {set.authorUsername}</p>
                 )}
             </div>
             
@@ -154,32 +154,33 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
                 ) : (
                     <>
                     <div className="flex bg-[var(--background)] shadow rounded-lg my-4">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="w-full divide-y divide-gray-200 table-fixed">
+                            <thead className="bg-gray-50 text-xs lg:text-base font-medium text-gray-500 uppercase tracking-wider">
                                 <tr>
-                                    <th className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-4/9">Keyword</th>
-                                    <th className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-4/9">Definition</th>
-                                    <th className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
-                                    <th className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</th>
+                                    <th className="pl-1 md:p-4 text-left w-2/5">Keyword</th>
+                                    <th className="py-1 md:p-4 text-left w-2/5">Definition</th>
+                                    <th className="py-1 md:p-4 text-center w-3/20">Edit</th>
+                                    <th className="py-1 md:p-4 text-center w-3/20">Delete</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-[var(--foreground)]">
+                            <tbody className="text-[var(--foreground)] text-sm md:text-lg lg:text-xl">
                                 {
                                     Object.entries(flashcards).map(([id, f]) => {
                                         return (
-                                            <tr key={id}>
-                                                <td className="p-3 w-4/9">
+                                            <tr key={id} className="w-full">
+                                                <td className="pl-1 md:p-4 w-2/5">
                                                     {f.editable ? (
                                                         <div className="flex flex-row">
                                                             {f.modified && (<p className="text-orange-500 mr-1">• </p>)}
                                                             <input value={f.keyword} onChange={(e) => handleFlashcardKeywordChange(e.target.value, id)}
-                                                                className="focus:outline-none"/>
+                                                                className="focus:outline-none "/>
                                                         </div>
                                                         ) : (
                                                             f.keyword
                                                         )}
                                                 </td>
-                                                <td className="p-3 w-4/9">
+
+                                                <td className="md:p-4 w-2/5">
                                                     {f.editable ? (
                                                         <input value={f.definition} onChange={(e) => handleFlashcardDefinitionChange(e.target.value, id)}
                                                             className="focus:outline-none"/>
@@ -187,20 +188,18 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
                                                             f.definition
                                                         )}
                                                 </td>                                                    
-                                                {
-                                                    //<td className="p-3 w-4/9">{f.definition}</td>
-                                                }
-                                                <td className="p-3 text-center">
+
+                                                <td className="md:p-4">
                                                     {f.editable ? (
-                                                        <button onClick={() => handleFlashcardUpdate(id)} className="text-lg mr-5 ml-2 hover:cursor-pointer">✔️</button>                   
+                                                        <button onClick={() => handleFlashcardUpdate(id)} className="hover:cursor-pointer w-full">✔️</button>                   
                                                     ) : (                   
-                                                        //<button onClick={() => handleRowChange(id)} className="hover:cursor-pointer">✏️</button>
-                                                        <button onClick={() => changeEditability(id, true)} className="hover:cursor-pointer">✏️</button>
+                                                        <button onClick={() => changeEditability(id, true)} className="hover:cursor-pointer w-full">✏️</button>
                                                     )}
                                                     
                                                 </td>
-                                                <td className="p-3 text-center">
-                                                    <button onClick={() => handleDeleteFlashcard(id)} className="text-lg mr-5 ml-2 hover:cursor-pointer">🗑️</button>
+                                                
+                                                <td className="md:p-4">
+                                                    <button onClick={() => handleDeleteFlashcard(id)} className="hover:cursor-pointer w-full">🗑️</button>
                                                 </td>
                                             </tr>
                                         )
@@ -211,8 +210,8 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
                     </div>
 
                     <div className="w-full flex items-right justify-end">
-                        <button className="bg-[var(--highlight-mint)] right-6 rounded-lg self-end mr-2
-                            :cursor-pointer mt-4 text-[var(--background)] p-2 hover:cursor-pointer font-bold"
+                        <button className="bg-[var(--highlight-mint)] rounded-lg lg:rounded-xl self-end lg:text-lg
+                            :cursor-pointer mt-4 text-[var(--background)] p-2 lg:px-3 hover:cursor-pointer font-bold"
                             onClick={saveAllChanges}>Save changes</button>
                     </div>
                     </>
