@@ -10,7 +10,7 @@ interface Props {
 const SetGrid : React.FC<Props> = ({setArray} : Props) : JSX.Element => {
 
     return (
-        <div className="grid grid-cols-3 grid-rows-2 gap-0 my-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-0 md:my-10">
             {(setArray != null && setArray.length > 0) ? ( 
                 setArray.map((set) => {
                     return (
