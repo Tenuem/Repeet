@@ -15,6 +15,15 @@ export const getFlashcardAPI = async (id: string | null = null) => {
   }
 };
 
+export const getFlashcardsByAuthorAPI = async (author: string) => {
+  try {
+      const data = await axios.get<FlashcardGet[]>(api + `?authorusername=${author}`);
+      return data;
+  } catch (error) {
+      handleError(error);
+  }
+};
+
 export const addFlashcardApi = async (keyword: string, definition: string, setId: string) => {
   try {
       const data = await axios.post<FlashcardPost>("http://localhost:5136/sets/" + `${setId}/flashcards`, {

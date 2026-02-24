@@ -13,6 +13,15 @@ export const setGetAPI = async (name: string | null = null) => {
   }
 };
 
+export const getAuthorsSetsAPI = async (author: string) => {
+    try {
+        const data = await axios.get<SetDetailedGet[]>(api + `?authorusername=${author}`);
+        return data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
 export const setDetailsGetAPI = async (id: string | null = null) => {
   try {
       const fullApiString = id ? api + `/${id}` : api;

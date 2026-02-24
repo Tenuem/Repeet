@@ -1,7 +1,9 @@
-import { useEffect, useState, type JSX } from "react"
+import { useContext, useEffect, useState, type JSX } from "react"
 import FlashcardRevisions from "../Components/Flashcard/FlashcardRevisions"
 import type { FlashcardGet } from "../Models/Flashcard.ts"
-import { getFlashcardAPI } from "../Services/FlashcardService.tsx"
+import { getFlashcardAPI, getFlashcardsByAuthorAPI } from "../Services/FlashcardService.tsx"
+import { useAuthContext } from "../Context/authContext";
+import { handleError } from "../Helpers/ErrorHandler.tsx";
 
 type Props = {}
 
@@ -18,6 +20,8 @@ const Revisions : React.FC<Props> = () : JSX.Element => {
     const [isAnswered, setIsAnswerd] = useState(false);
     const [totalRevisionsNumber, setTotalRevisionsNumber] = useState<number>(0);
     const [answeredCorrectlyNumber, setAnsweredCorrectlyNumber] = useState<number>(0);
+
+    const { user } = useAuthContext();
 
     const handleFlashcardRevision = (rating: number, id:string) => {
         if (rating === RevisionRating.Good || rating === RevisionRating.Ok){
@@ -49,21 +53,20 @@ const Revisions : React.FC<Props> = () : JSX.Element => {
     useEffect(() => {
 
         // for the future only flashcards of a user to revise
-        // all flashcards for now
+        // user's flashcards for now
         const getAllFlashcards = async () => {
-            await getFlashcardAPI()
-            .then((res) => {
-                if (res?.data) {
-                    setData(res?.data);
-                    setTotalRevisionsNumber(res?.data.length);
-                    //console.log(res?.data);
-                }
-            })
-            .catch((e) => {
-                setData([]);
-                // handle error todo
-                console.log(e);
-            }); 
+            if (user)
+                await getFlashcardsByAuthorAPI(user.username)
+                .then((res) => {
+                    if (res?.data) {
+                        setData(res?.data);
+                        setTotalRevisionsNumber(res?.data.length);
+                    }
+                })
+                .catch((e) => {
+                    setData([]);
+                    handleError(e);
+                }); 
         }
         getAllFlashcards(); 
 

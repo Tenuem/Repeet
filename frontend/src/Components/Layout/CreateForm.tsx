@@ -1,7 +1,8 @@
 import { useEffect, useState, type ChangeEvent, type JSX, type SyntheticEvent } from "react";
-import { fullSetsGetAPI } from "../../Services/SetService";
+import { getAuthorsSetsAPI } from "../../Services/SetService";
 import type { SetDetailedGet } from "../../Models/Set";
 import { handleError } from "../../Helpers/ErrorHandler";
+import { useAuthContext } from "../../Context/authContext";
 
 
 interface Props {
@@ -15,18 +16,19 @@ interface Props {
 const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedSetId, isNewSet, newSetString}) : JSX.Element => {
     const [sets, setSets] = useState<SetDetailedGet[] | null >([]);
     const [chosenSet, setChosenSet] = useState<SetDetailedGet | null>(null);
+    const { user } = useAuthContext();
 
     const [newKeywords, setNewKeywords] = useState<string[]>([]);
     const [newDefinitions, setNewDefinitions] = useState<string[]>([]);
 
 
     useEffect(() => {
-        fullSetsGetAPI()
+
+        if (user)
+        getAuthorsSetsAPI(user.username)
         .then((res) => {
-            if (res?.data) {
-                // TODO filter to only user sets
+            if (res?.data)
                 setSets(res?.data); 
-            }
         })
         .catch((e) => {
             setSets(null);
@@ -145,6 +147,5 @@ const CreateForm : React.FC<Props> = ({setBlur, handleOnFormSubmit, setSelectedS
             </form>
         </div>
     )
-
 }
 export default CreateForm;
