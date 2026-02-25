@@ -15,7 +15,7 @@ function App() {
     <>
       <UserProvider>
         <Navbar setBlur={setBlur} />
-        <main className={`max-w-7xl mx-auto p-4 overflow-hidden ${blur ? 'blur-sm' : ''}`}>
+        <main className={`mx-auto overflow-hidden ${blur ? 'blur-sm' : ''}`}>
           <Outlet />
         </main>
         {blur && <CreateNewPopUpWindow setBlur={setBlur}/>}

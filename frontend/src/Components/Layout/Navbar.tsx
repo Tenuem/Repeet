@@ -20,7 +20,9 @@ const Navbar = ({ setBlur } : Props) : JSX.Element => {
           <Link to="/" className="font-bold ml-1 px-1 md:px-2 xl:px-3">REPEET</Link>
           <Link to="/explore" className="hover:scale-105 px-1 md:px-2 xl:px-3">EXPLORE</Link>
           <Link to="/revisions" className="hover:scale-105 px-1 md:px-2 xl:px-3">REVISIONS</Link>
-          <Link to="/games" className="hover:scale-105 px-1 md:px-2 xl:px-3">GAMES</Link>
+          {
+            //<Link to="/games" className="hover:scale-105 px-1 md:px-2 xl:px-3">GAMES</Link>
+          }
         </div>
         <div className="my-auto px-1">
           { !isMobile && (

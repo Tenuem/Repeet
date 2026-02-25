@@ -25,6 +25,7 @@ const LoginPage = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             await loginUser(data.username, data.password);
+            navigate("/");
         } catch (error: any) {
             console.log(error);
             setError('root', {

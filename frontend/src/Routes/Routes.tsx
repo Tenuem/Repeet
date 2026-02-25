@@ -6,13 +6,14 @@ import LoginPage from "../Pages/Login";
 import RegisterPage from "../Pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import AccountPage from "../Pages/AccountPage";
+import HomePage from "../Pages/Home/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "", element: <div>Home</div>},
+      { path: "", element: <HomePage />},
       { path: "explore", element: <Explore />},
       { path: "revisions", element: <ProtectedRoute><Revisions /></ProtectedRoute> },
       { path: "login", element: <LoginPage /> },

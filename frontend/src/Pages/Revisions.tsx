@@ -53,7 +53,7 @@ const Revisions : React.FC<Props> = () : JSX.Element => {
     useEffect(() => {
 
         // for the future only flashcards of a user to revise
-        // user's flashcards for now
+        // all user's flashcards for now
         const getAllFlashcards = async () => {
             if (user)
                 await getFlashcardsByAuthorAPI(user.username)

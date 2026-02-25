@@ -70,7 +70,7 @@ const Explore : React.FC<Props> = () : JSX.Element => {
     };
 
     return (
-        <>
+        <div className="p-4">
             {!hasQuery ? (
                 <>
                     <Searchbar search={searchValue} handleSearchChange={handleSearch} handleEnter={handleKeyDown} updateSets={updateSets}/>
@@ -82,7 +82,7 @@ const Explore : React.FC<Props> = () : JSX.Element => {
                     <p className="text-center text-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">This element does not exist</p>
             )
             }
-        </>
+        </div>
     )
 }
 export default Explore;

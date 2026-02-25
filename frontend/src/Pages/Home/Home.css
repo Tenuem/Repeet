@@ -1,0 +1,7 @@
+.clip-triangle {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+}
+
+.clip-5 {
+  clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 30% 100%, 0% 0%);
+}
