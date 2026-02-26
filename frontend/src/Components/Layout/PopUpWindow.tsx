@@ -3,6 +3,7 @@ import CreateForm from "./CreateForm";
 import { addSetAPI } from "../../Services/SetService";
 import { toast } from "react-toastify";
 import { addFlashcardApi } from "../../Services/FlashcardService";
+import { handleError } from "../../Helpers/ErrorHandler";
 
 interface Props {
     setBlur: (val: boolean) => void;
@@ -28,11 +29,11 @@ const CreateNewPopUpWindow : React.FC<Props> = ({ setBlur } : Props) : JSX.Eleme
             if (res?.status === 201) {
                 toast.success("New set added!");
                 setData = res?.data;
-                console.log(res?.data);
+                //console.log(res?.data);
             }
         })
         .catch((e) => {
-            console.log(e);
+            handleError(e);
         });
     }
 

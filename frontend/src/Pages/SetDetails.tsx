@@ -1,9 +1,10 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type JSX, type SyntheticEvent } from "react";
 import type { SetDetailedGet } from "../Models/Set";
 import Table from "../Components/Table/Table";
 import { useAuthContext } from "../Context/authContext";
 import { updateSetAPI } from "../Services/SetService";
-import { deleteFlashcardApi, updateFlashcardApi } from "../Services/FlashcardService";
+import { addFlashcardApi, deleteFlashcardApi, updateFlashcardApi } from "../Services/FlashcardService";
+import { toast } from "react-toastify";
 
 type Flashcard = {
     keyword: string;
@@ -35,12 +36,60 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
     const [setnameEditable, setSetnameEditable] = useState<boolean>(false);
 
     const [flashcards, setFlashcards] = useState<Record<string, Flashcard>>({});
+    const [newFlashcardWindow, setNewFlashcardWindow] = useState<boolean>(false);
+    const [newFlashcard, setNewFlashcard] = useState<Flashcard | null>(null);
     
     const handleSetnameChange = async () => {
         setSetnameEditable(false);
         if (set){
             await updateSetAPI(set.id, setname);
         }
+    }
+
+    const handleAddNewFlashcard = async (e: any) => {
+        e.preventDefault();
+
+        const keyword = e.target[0].value;
+        const definition = e.target[1].value;
+
+        if (set){
+            await addFlashcardApi(keyword, definition, set.id)
+                .then((res) => {
+                    if (res?.status === 201) {
+                        setFlashcards(prev => ({
+                            ...prev,
+                            [set.id]: {
+                                keyword: keyword,
+                                definition: definition,
+                                modified: false,
+                                editable: false
+                            }
+                        }))
+                        handleCancelNewFlashcard();
+                    }
+                });
+        }
+    }
+
+    const handleCancelNewFlashcard = () => {
+        setNewFlashcardWindow(false);
+        setNewFlashcard(null);
+    }
+
+    const handleNewFlashcardChange = (keyword: string | null, definition: string | null) => {
+        if (newFlashcard === null){
+            setNewFlashcard({
+                keyword: keyword ?? "",
+                definition: definition ?? "",
+                editable: true,
+                modified: true
+            })
+        } else
+            setNewFlashcard(prev => ({
+                ...prev!, 
+                keyword: keyword ?? prev!.keyword,
+                definition: definition ?? prev!.definition
+            }))
     }
 
     const handleFlashcardUpdate = async (id: string) => {
@@ -159,8 +208,8 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
                                 <tr>
                                     <th className="pl-1 md:p-4 text-left w-2/5">Keyword</th>
                                     <th className="py-1 md:p-4 text-left w-2/5">Definition</th>
-                                    <th className="py-1 md:p-4 text-center w-3/20">Edit</th>
-                                    <th className="py-1 md:p-4 text-center w-3/20">Delete</th>
+                                    <th className="py-1 md:p-4 text-center w-1/10">Edit</th>
+                                    <th className="py-1 md:p-4 text-center w-1/10">Delete</th>
                                 </tr>
                             </thead>
                             <tbody className="text-[var(--foreground)] text-sm md:text-lg lg:text-xl">
@@ -209,11 +258,28 @@ const SetDetails : React.FC<Props> = ({set} : Props) : JSX.Element => {
                         </table>
                     </div>
 
-                    <div className="w-full flex items-right justify-end">
+                    <div className="w-full flex justify-between items-center px-4">
+                        <p className="hover:cursor-pointer hover:text-[var(--highlight-fuchsia)]"
+                            onClick={(_) => setNewFlashcardWindow(true)}>ADD NEW</p>
                         <button className="bg-[var(--highlight-mint)] rounded-lg lg:rounded-xl self-end lg:text-lg
                             :cursor-pointer mt-4 text-[var(--background)] p-2 lg:px-3 hover:cursor-pointer font-bold"
                             onClick={saveAllChanges}>Save changes</button>
                     </div>
+
+                    {newFlashcardWindow && (
+                        <div className="w-full shadow rounded-xl text-[var(--foreground)] text-sm md:text-lg lg:text-xl my-4">
+                            <form onSubmit={handleAddNewFlashcard} className="bg-gray-100">
+                                <input type="text" className="w-2/5 focus:outline-none md:p-4" placeholder="Keyword" required
+                                    onChange={(e) => handleNewFlashcardChange(e.target.value, null)}/>
+                                <input type="text" className="w-2/5 focus:outline-none md:p-4" placeholder="Definition" required
+                                    onChange={(e) => handleNewFlashcardChange(null, e.target.value)}/>
+                                <button type="submit" className="hover:cursor-pointer w-1/10 text-[var(--highlight-mint)]">SAVE</button>
+                                <button onClick={handleCancelNewFlashcard} className="hover:cursor-pointer w-1/10 text-red-500">CANCEL</button>
+                            </form>
+                            
+
+                        </div>
+                    )}
                     </>
                 )
                 //

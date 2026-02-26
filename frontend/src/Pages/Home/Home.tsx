@@ -10,7 +10,7 @@ const HomePage = () => {
         <div className="w-full flex flex-row md:pl-4">
             <div className="w-full xl:w-2/5 px-4 md:ml-10 flex items-center flex-col ">
                 <div className="bg-transparent text-center md:text-left text-4xl sm:text-6xl md:text-7xl leading-12 md:leading-20 font-bold my-15 tracking-wider">
-                    <h1 className="text-[var(--foreground)]" >JUMP INTO <br/>THE WORLD OF</h1>
+                    <h1 className="text-[var(--foreground)]">JUMP INTO <br/>THE WORLD OF</h1>
                     <h1 className="text-[var(--highlight-fuchsia)]">KNOWLEDGE</h1>
                     <h3 className="font-normal text-2xl md:text-3xl pt-10 tracking-normal">TRAIN YOUR MEMORY WITH US</h3>
                 </div>
@@ -36,7 +36,7 @@ const HomePage = () => {
                 <div className='w-full flex flex-row absolute inset-0'>
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-70 clip-5"
-                        style={{ backgroundImage: "url('../../../public/learn.jpeg')" }}
+                        style={{ backgroundImage: "url('/learn.jpeg')" }}
                     />
                 </div>
             </div>
