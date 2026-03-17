@@ -7,5 +7,5 @@ User is able to create collections of 'flashcards' and revise them to train thei
   - *EntityFramework* with *MSSQL*
   - *JWT Tokens*
 
-  - *React* with *Typescript*
+  - *React* with *Typescript* and *Vite*
   - *Tailwind CSS*
